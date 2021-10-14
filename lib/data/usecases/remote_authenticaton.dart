@@ -7,7 +7,7 @@ class RemoteAuthentication {
   final HttpClient httpClient;
   final String url;
 
-  RemoteAuthentication({@required this.httpClient, @required this.url},);
+  RemoteAuthentication({@required this.httpClient, @required this.url});
 
   Future<void> auth(AuthenticationParams params) async {
     await httpClient.request(
@@ -26,8 +26,8 @@ class RemoteAuthenticationParams {
     @required this.password,
   });
 
-  factory RemoteAuthenticationParams.fromDomains( AuthenticationParams params) => 
-    RemoteAuthenticationParams(email: params.email, password: params.secret);
+  factory RemoteAuthenticationParams.fromDomains(AuthenticationParams params) =>
+      RemoteAuthenticationParams(email: params.email, password: params.secret);
 
   Map toJon() => {'email': email, 'password': password};
 }
