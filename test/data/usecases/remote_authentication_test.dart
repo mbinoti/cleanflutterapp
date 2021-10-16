@@ -7,6 +7,7 @@ import 'package:cleanflutterapp/domain/usecases/usecases.dart';
 import 'package:cleanflutterapp/data/http/http.dart';
 
 import 'package:cleanflutterapp/data/usecases/usecases.dart';
+import 'package:cleanflutterapp/domain/helpers/helpers.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
@@ -29,5 +30,20 @@ void main() {
         url: url,
         method: 'post',
         body: {'email': params.email, 'password': params.secret}));
+  });
+
+  test('Should throw UnexpectedError if httpClient returns 400', () async {
+    when(
+      httpClient.request(
+        url: anyNamed('url'),
+        method: anyNamed('method'),
+        body: anyNamed('body'),
+      ),
+    ).thenThrow(HttpError.badRequest);
+    final params = AuthenticationParams(
+        email: faker.internet.email(), secret: faker.internet.password());
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
